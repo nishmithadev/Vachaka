@@ -36,5 +36,5 @@ Deaf and hard-of-hearing individuals face daily challenges in communicating with
 ## 👥 Team  
 **Project Name:** *Vachaka*  
 - 👩‍💻 Nishmitha Devadiga – AI/ML & Documentation  
-- 👩‍💻 Teammate – Frontend & Backend Development  
+- 👩‍💻 Vibhavari A – Frontend & Backend Development  
 
