@@ -1,0 +1,100 @@
+/* App.css */
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f8;
+}
+
+.app-container {
+  text-align: center;
+  padding: 20px;
+}
+
+header {
+  margin-bottom: 20px;
+}
+
+header h1 {
+  font-size: 2.2rem;
+  color: #2d2f3b;
+  margin: 0;
+}
+
+header p {
+  font-size: 1rem;
+  color: #555;
+}
+
+.translator-box {
+  background: #fff;
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 600px;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 12px;
+  outline: none;
+  resize: none;
+  transition: border-color 0.3s;
+}
+
+textarea:focus {
+  border-color: #007bff;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:disabled {
+  background-color: #7aa7ff;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}
+
+.result-box,
+.audio-box {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f8f9ff;
+  border: 1px solid #e0e0ff;
+  border-radius: 10px;
+  text-align: left;
+}
+
+.result-box h3,
+.audio-box h3 {
+  margin: 0 0 8px;
+  color: #333;
+}
+
+audio {
+  width: 100%;
+  margin-top: 10px;
+  outline: none;
+}
