@@ -11,7 +11,10 @@
     />
 
     <!-- SEO Meta Tags -->
-    <meta name="keywords" content="Vachaka, Sign Language, Speech Translator, Accessibility, React App" />
+    <meta
+      name="keywords"
+      content="Vachaka, Sign Language, Speech Translator, Accessibility, React App"
+    />
     <meta name="author" content="Vachaka Team" />
 
     <!-- Apple Touch Icon -->
@@ -23,7 +26,7 @@
     <!-- Title -->
     <title>Vachaka - Sign to Speech Translator</title>
 
-    <!-- Google Fonts (Optional, for better typography) -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -35,7 +38,7 @@
     <style>
       body {
         margin: 0;
-        font-family: 'Roboto', sans-serif;
+        font-family: "Roboto", sans-serif;
         background-color: #f7f9fc;
       }
       #root {
@@ -49,6 +52,22 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <!-- ✅ React will mount here -->
     <div id="root"></div>
+
+    <!-- ✅ SIMD patch script -->
+    <script>
+      const originalFetch = window.fetch;
+      window.fetch = async (...args) => {
+        if (typeof args[0] === "string" && args[0].includes("simd")) {
+          console.warn("⚠️ Blocking SIMD fetch:", args[0]);
+          return originalFetch(
+            "https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands_solution_wasm_bin.js"
+          );
+        }
+        return originalFetch(...args);
+      };
+    </script>
   </body>
 </html>

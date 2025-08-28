@@ -1,0 +1,73 @@
+/* src/pages/Home.css */
+
+/* Container for the entire home page including sidebar */
+.home-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+}
+
+/* Main content area next to the sidebar */
+.home-content {
+  flex: 1;
+  padding: 40px 60px;
+  background-color: #ffffff;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.05);
+}
+
+/* Headings */
+.home-content h1 {
+  font-size: 2.5rem;
+  color: #333333;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* Paragraphs */
+.home-content p {
+  font-size: 1.1rem;
+  color: #555555;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+/* List of features */
+.home-content ul {
+  list-style-type: disc;
+  margin-left: 20px;
+  color: #555555;
+}
+
+.home-content ul li {
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+/* Buttons (if needed in future) */
+.home-content button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.home-content button:hover {
+  background-color: #45a049;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .home-container {
+    flex-direction: column;
+  }
+
+  .home-content {
+    padding: 20px;
+  }
+}

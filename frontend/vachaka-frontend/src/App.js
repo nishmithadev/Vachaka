@@ -1,34 +1,26 @@
-import React, { useState } from "react";
-import Header from "./component/Header";
-import Footer from "./component/Footer";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import TranslatePage from "./pages/TranslatePage";
 import Dashboard from "./component/Dashboard";
-import Translator from "./component/Translator";
-import "./App.css";
+import Sidebar from "./component/Sidebar";
+import "./styles/global.css";
 
-/*
-  Simple view switcher: Dashboard <-> Translator.
-  You can later swap this for react-router if you want real routes.
-*/
-export default function App() {
-  const [view, setView] = useState("dashboard"); // "dashboard" | "translator"
-
-  const openTranslator = (mode) => {
-    // mode can be "textToSpeech" | "speechToText" | "signToSpeech"
-    setView({ name: "translator", mode });
-  };
-
-  const backToDashboard = () => setView("dashboard");
-
+function App() {
   return (
-    <div className="app">
-      <Header onHome={backToDashboard} />
-      <main className="main">
-        {view === "dashboard" && <Dashboard onOpen={openTranslator} />}
-        {typeof view === "object" && view.name === "translator" && (
-          <Translator mode={view.mode} onBack={backToDashboard} />
-        )}
-      </main>
-      <Footer />
-    </div>
+    <Router>
+      <div className="app-container">
+        <Sidebar />
+        <div className="main-content">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/translate" element={<TranslatePage />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Routes>
+        </div>
+      </div>
+    </Router>
   );
 }
+
+export default App;

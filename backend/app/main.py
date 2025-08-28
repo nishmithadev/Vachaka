@@ -1,63 +1,41 @@
-# backend/main.py
-import os
-import uuid
-from gtts import gTTS
-from fastapi import FastAPI, Request, Form
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
 
-app = FastAPI(title="Vachaka API", version="1.0")
+app = FastAPI()
 
-# CORS (adjust as needed)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "*"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Serve generated audio files
-AUDIO_DIR = "tts_audio"
-os.makedirs(AUDIO_DIR, exist_ok=True)
-app.mount("/tts_audio", StaticFiles(directory=AUDIO_DIR), name="tts_audio")
+class Landmarks(BaseModel):
+    landmarks: list
 
+class TextData(BaseModel):
+    text: str
 
-@app.get("/api/ping")
-def ping():
-    return {"ok": True, "message": "Vachaka backend is running 🚀"}
+class TranslateData(BaseModel):
+    text: str
+    targetLang: str
 
+@app.post("/sign-to-text")
+async def sign_to_text(data: Landmarks):
+    # TODO: Replace with your trained ML model
+    predicted_text = "Hello"  # Dummy output
+    return {"text": predicted_text}
 
-@app.post("/api/text-to-speech")
-async def text_to_speech(request: Request, text: str | None = Form(default=None)):
-    """
-    Accepts either JSON: {"text": "..."} or form-data: text=...
-    Saves MP3 using gTTS and returns a public URL.
-    """
-    try:
-        # Try JSON first
-        data_text = None
-        try:
-            payload = await request.json()
-            data_text = (payload or {}).get("text")
-        except Exception:
-            pass
+@app.post("/text-to-speech")
+async def text_to_speech(data: TextData):
+    # TODO: Integrate IBM Watson or Google TTS API
+    audio_url = "http://127.0.0.1:8000/audio/output.mp3"  # Dummy URL
+    return {"audio_url": audio_url}
 
-        # Fallback to form (if sent as FormData)
-        if data_text is None:
-            data_text = text
-
-        if not data_text or not str(data_text).strip():
-            return JSONResponse({"error": "Text is required"}, status_code=400)
-
-        filename = f"{uuid.uuid4()}.mp3"
-        filepath = os.path.join(AUDIO_DIR, filename)
-
-        tts = gTTS(text=str(data_text), lang="en")
-        tts.save(filepath)
-
-        # return relative path; frontend will prefix with API base
-        return {"audio_url": f"/tts_audio/{filename}"}
-    except Exception as e:
-        return JSONResponse({"error": f"{type(e).__name__}: {e}"}, status_code=500)
+@app.post("/translate")
+async def translate_text(data: TranslateData):
+    # TODO: Replace with Google Translate / IBM Granite API
+    translated_text = data.text  # Temporary passthrough
+    return {"translatedText": translated_text}
