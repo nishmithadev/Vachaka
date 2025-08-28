@@ -1,73 +1,63 @@
-from fastapi import FastAPI, UploadFile, Form
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse, JSONResponse
+# backend/main.py
+import os
+import uuid
 from gtts import gTTS
-import io
-import speech_recognition as sr
-from PIL import Image
+from fastapi import FastAPI, Request, Form
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
-app = FastAPI()
+app = FastAPI(title="Vachaka API", version="1.0")
 
-# Allow frontend access
+# CORS (adjust as needed)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Update with frontend URL if needed
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Serve generated audio files
+AUDIO_DIR = "tts_audio"
+os.makedirs(AUDIO_DIR, exist_ok=True)
+app.mount("/tts_audio", StaticFiles(directory=AUDIO_DIR), name="tts_audio")
 
-@app.get("/")
-def root():
-    return {"message": "Vachaka Translator Backend is running!"}
+
+@app.get("/api/ping")
+def ping():
+    return {"ok": True, "message": "Vachaka backend is running 🚀"}
 
 
-# ------------------- TEXT → SPEECH -------------------
-@app.post("/text-to-speech/")
-async def text_to_speech(text: str = Form(...)):
+@app.post("/api/text-to-speech")
+async def text_to_speech(request: Request, text: str | None = Form(default=None)):
+    """
+    Accepts either JSON: {"text": "..."} or form-data: text=...
+    Saves MP3 using gTTS and returns a public URL.
+    """
     try:
-        # Convert text to speech
-        tts = gTTS(text=text, lang="en")
-        audio_bytes = io.BytesIO()
-        tts.write_to_fp(audio_bytes)
-        audio_bytes.seek(0)
+        # Try JSON first
+        data_text = None
+        try:
+            payload = await request.json()
+            data_text = (payload or {}).get("text")
+        except Exception:
+            pass
 
-        # Return audio as streaming response
-        return StreamingResponse(audio_bytes, media_type="audio/mpeg")
+        # Fallback to form (if sent as FormData)
+        if data_text is None:
+            data_text = text
+
+        if not data_text or not str(data_text).strip():
+            return JSONResponse({"error": "Text is required"}, status_code=400)
+
+        filename = f"{uuid.uuid4()}.mp3"
+        filepath = os.path.join(AUDIO_DIR, filename)
+
+        tts = gTTS(text=str(data_text), lang="en")
+        tts.save(filepath)
+
+        # return relative path; frontend will prefix with API base
+        return {"audio_url": f"/tts_audio/{filename}"}
     except Exception as e:
-        return JSONResponse(
-            status_code=500,
-            content={"error": f"Text-to-speech failed: {str(e)}"},
-        )
-
-
-# ------------------- SPEECH → TEXT -------------------
-@app.post("/speech-to-text/")
-async def speech_to_text(file: UploadFile):
-    try:
-        recognizer = sr.Recognizer()
-        with sr.AudioFile(file.file) as source:
-            audio_data = recognizer.record(source)
-            text = recognizer.recognize_google(audio_data)
-        return {"text": text}
-    except Exception as e:
-        return JSONResponse(
-            status_code=500,
-            content={"error": f"Speech-to-text failed: {str(e)}"},
-        )
-
-
-# ------------------- SIGN → TEXT -------------------
-@app.post("/sign-to-text/")
-async def sign_to_text(file: UploadFile):
-    try:
-        # Placeholder for sign detection logic
-        img = Image.open(file.file)
-        # For now, just return a dummy response
-        return {"text": "Sign language recognition not yet implemented"}
-    except Exception as e:
-        return JSONResponse(
-            status_code=500,
-            content={"error": f"Sign-to-text failed: {str(e)}"},
-        )
+        return JSONResponse({"error": f"{type(e).__name__}: {e}"}, status_code=500)
