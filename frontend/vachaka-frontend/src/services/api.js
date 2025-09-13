@@ -1,23 +1,29 @@
-import axios from "axios";
+const BASE = process.env.REACT_APP_API_BASE || "http://127.0.0.1:8000";
 
-const API_URL = "http://127.0.0.1:8000"; // Change if backend runs elsewhere
+export async function translateText(text, target_lang) {
+  const form = new FormData();
+  form.append("text", text);
+  form.append("target_lang", target_lang || "en");
 
-export const apiSignToText = async (imageData) => {
-  try {
-    const response = await axios.post(`${API_URL}/sign-to-text`, { image: imageData });
-    return response.data;
-  } catch (error) {
-    console.error("Sign to Text API Error:", error);
-    throw error;
-  }
-};
+  const res = await fetch(`${BASE}/translate`, { method: "POST", body: form });
+  if (!res.ok) throw new Error("Translate failed");
+  return res.json(); // { translated_text }
+}
 
-export const apiTextToSpeech = async (text) => {
-  try {
-    const response = await axios.post(`${API_URL}/text-to-speech`, { text });
-    return response.data.audio_url;
-  } catch (error) {
-    console.error("Text-to-Speech API Error:", error);
-    throw error;
-  }
-};
+export async function textToSpeech(text) {
+  const form = new FormData();
+  form.append("text", text);
+
+  const res = await fetch(`${BASE}/tts`, { method: "POST", body: form });
+  if (!res.ok) throw new Error("TTS failed");
+  return res.json(); // { audio_file: "tts_audio/output.mp3" }
+}
+
+export async function speechToText(file) {
+  const form = new FormData();
+  form.append("file", file);
+
+  const res = await fetch(`${BASE}/stt`, { method: "POST", body: form });
+  if (!res.ok) throw new Error("STT failed");
+  return res.json(); // { transcript }
+}

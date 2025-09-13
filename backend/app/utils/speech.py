@@ -1,14 +1,13 @@
-import pyttsx3
 import os
+from datetime import datetime
 
-def convert_text_to_speech(text: str):
-    engine = pyttsx3.init()
-    audio_path = f"static/{text.replace(' ', '_')}.mp3"
+OUTPUT_DIR = "static/tts"
 
-    # Create "static" folder if not exists
-    os.makedirs("static", exist_ok=True)
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    engine.save_to_file(text, audio_path)
-    engine.runAndWait()
-
-    return audio_path
+def save_audio(audio_bytes):
+    filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}.mp3"
+    path = os.path.join(OUTPUT_DIR, filename)
+    with open(path, "wb") as f:
+        f.write(audio_bytes)
+    return f"/static/tts/{filename}"

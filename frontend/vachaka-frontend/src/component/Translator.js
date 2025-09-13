@@ -1,62 +1,102 @@
-import React, { useRef, useEffect, useState } from "react";
-import { Camera } from "@mediapipe/camera_utils";
-import * as drawingUtils from "@mediapipe/drawing_utils";
-import { apiSignToText, apiTextToSpeech } from "../api";
-import { createHandsInstance } from "../utils/handsHelper";
-import "../App.css";
+import React, { useState } from "react";
+import { translateText, textToSpeech, speechToText } from "../services/api";
+
+const card = { background:"#fff", borderRadius:12, padding:18, boxShadow:"0 4px 18px rgba(0,0,0,.06)" };
 
 export default function Translator() {
-  const videoRef = useRef(null);
-  const canvasRef = useRef(null);
-  const [result, setResult] = useState("");
+  const [input, setInput] = useState("");
+  const [lang, setLang] = useState("en");
+  const [translated, setTranslated] = useState("");
+  const [audioUrl, setAudioUrl] = useState("");
+  const [sttFile, setSttFile] = useState(null);
+  const [transcript, setTranscript] = useState("");
 
-  useEffect(() => {
-    const hands = createHandsInstance(async (results) => {
-      const ctx = canvasRef.current.getContext("2d");
-      ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-      ctx.drawImage(results.image, 0, 0, canvasRef.current.width, canvasRef.current.height);
-
-      if (results.multiHandLandmarks?.length > 0) {
-        for (const landmarks of results.multiHandLandmarks) {
-          drawingUtils.drawConnectors(ctx, landmarks, Hands.HAND_CONNECTIONS, {
-            color: "#00FF00",
-            lineWidth: 2,
-          });
-          drawingUtils.drawLandmarks(ctx, landmarks, {
-            color: "#FF0000",
-            lineWidth: 1,
-          });
-
-          try {
-            const response = await apiSignToText(landmarks);
-            setResult(response.text);
-            const audioUrl = await apiTextToSpeech(response.text);
-            new Audio(audioUrl).play();
-          } catch (err) {
-            console.error("API Error:", err);
-          }
-        }
-      }
-    });
-
-    if (videoRef.current) {
-      const camera = new Camera(videoRef.current, {
-        onFrame: async () => await hands.send({ image: videoRef.current }),
-        width: 640,
-        height: 480,
-      });
-      camera.start();
+  async function doTranslate() {
+    setTranslated("…");
+    try {
+      const { translated_text } = await translateText(input, lang);
+      setTranslated(translated_text || "");
+    } catch (e) {
+      setTranslated(`Error: ${e.message}`);
     }
-  }, []);
+  }
+
+  async function doTTS() {
+    if (!translated && !input) return;
+    const text = translated || input;
+    setAudioUrl("");
+    try {
+      const { audio_file } = await textToSpeech(text);
+      // backend serves /tts_audio – build full URL for <audio> src
+      const base = process.env.REACT_APP_API_BASE || "http://127.0.0.1:8000";
+      setAudioUrl(`${base}/${audio_file}`);
+    } catch (e) {
+      alert("TTS error: " + e.message);
+    }
+  }
+
+  async function doSTT() {
+    if (!sttFile) return alert("Choose an MP3/WAV file first.");
+    setTranscript("…");
+    try {
+      const { transcript } = await speechToText(sttFile);
+      setTranscript(transcript || "");
+    } catch (e) {
+      setTranscript(`Error: ${e.message}`);
+    }
+  }
 
   return (
-    <div className="translator-container">
-      <video ref={videoRef} className="video-feed" autoPlay muted></video>
-      <canvas ref={canvasRef} className="canvas-feed"></canvas>
-      <div className="result-box">
-        <h3>Detected Sign:</h3>
-        <p>{result}</p>
+    <div style={{ display:"grid", gap:18 }}>
+      <div style={card}>
+        <h2>Translate with WatsonX Granite</h2>
+        <textarea
+          value={input}
+          onChange={e=>setInput(e.target.value)}
+          placeholder="Enter text to translate…"
+          rows={5}
+          style={{ width:"100%", padding:12, borderRadius:8, border:"1px solid #e5e7eb" }}
+        />
+        <div style={{ marginTop:10, display:"flex", gap:10, alignItems:"center" }}>
+          <label>Target language code:</label>
+          <input value={lang} onChange={e=>setLang(e.target.value)} style={{ padding:8, borderRadius:8, border:"1px solid #e5e7eb", width:120 }} />
+          <button onClick={doTranslate} style={btn}>Translate</button>
+        </div>
+        <div style={{ marginTop:12 }}>
+          <strong>Translated:</strong>
+          <div style={{ marginTop:6, background:"#f1f5f9", padding:12, borderRadius:8, minHeight:48 }}>{translated}</div>
+        </div>
+        <div style={{ marginTop:12, display:"flex", gap:10 }}>
+          <button onClick={doTTS} style={btn}>Generate Speech (TTS)</button>
+          {audioUrl && (
+            <audio controls src={audioUrl} style={{ alignSelf:"center" }}>
+              Your browser does not support audio.
+            </audio>
+          )}
+        </div>
+      </div>
+
+      <div style={card}>
+        <h2>Speech to Text (upload)</h2>
+        <p style={{ marginTop:0, color:"#475569" }}>
+          Upload an audio file (<b>.mp3</b> recommended). The backend forwards it to IBM Watson STT.
+        </p>
+        <input type="file" accept=".mp3,.wav,.m4a" onChange={e=>setSttFile(e.target.files?.[0] || null)} />
+        <button onClick={doSTT} style={{ ...btn, marginLeft:10 }}>Transcribe</button>
+        <div style={{ marginTop:12 }}>
+          <strong>Transcript:</strong>
+          <div style={{ marginTop:6, background:"#f1f5f9", padding:12, borderRadius:8, minHeight:48 }}>{transcript}</div>
+        </div>
       </div>
     </div>
   );
 }
+
+const btn = {
+  background:"#2563eb",
+  color:"#fff",
+  border:"none",
+  borderRadius:8,
+  padding:"10px 14px",
+  cursor:"pointer"
+};
