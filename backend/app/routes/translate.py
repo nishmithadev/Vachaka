@@ -1,6 +1,6 @@
 from fastapi import APIRouter, UploadFile, File
 from app.services.gesture_model import predict_sign
-from app.services.watson_client import text_to_speech
+from app.services.tts_client import text_to_speech
 from app.utils.speech import save_audio
 
 router = APIRouter(prefix="/api", tags=["Translate"])
