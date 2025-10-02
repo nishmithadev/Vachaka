@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import {
-  apiTextToSpeech,
-  apiSpeechToText,
-  apiSignToText,
-} from "../services/api";
+import { textToSpeech, speechToText, translateText } from "../services/api";
 
 const Demo = () => {
   const [text, setText] = useState("");
@@ -17,7 +13,7 @@ const Demo = () => {
     if (!text.trim()) return alert("Please enter some text!");
     try {
       setLoading(true);
-      const audioBlob = await apiTextToSpeech(text);
+      const audioBlob = await textToSpeech(text);
       const url = URL.createObjectURL(audioBlob);
       setAudio(url);
     } catch (error) {
@@ -34,7 +30,7 @@ const Demo = () => {
 
     try {
       setLoading(true);
-      const result = await apiSpeechToText(file);
+      const result = await speechToText(file);
       setSpeechText(result.text || "Could not recognize speech");
     } catch (error) {
       alert("Error converting speech to text!");
@@ -50,7 +46,7 @@ const Demo = () => {
 
     try {
       setLoading(true);
-      const result = await apiSignToText(file);
+      const result = await translateText(file); // using translateText for signs
       setSignText(result.text || "Could not recognize sign language");
     } catch (error) {
       alert("Error converting sign to text!");

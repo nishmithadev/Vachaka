@@ -13,10 +13,22 @@ export default function Header() {
           Home
         </Link>
         <Link
+          to="/dashboard"
+          className={location.pathname === "/dashboard" ? "active" : ""}
+        >
+          Dashboard
+        </Link>
+        <Link
           to="/translator"
           className={location.pathname === "/translator" ? "active" : ""}
         >
           Translator
+        </Link>
+        <Link
+          to="/demo"
+          className={location.pathname === "/demo" ? "active" : ""}
+        >
+          Demo
         </Link>
       </nav>
     </header>

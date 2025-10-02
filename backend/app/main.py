@@ -1,13 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import translate
 
-app = FastAPI(title="Vachaka - Sign Language Assistant")
+app = FastAPI(title="Vachaka - Sign Language to Speech")
 
 # Allow frontend requests
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # you can restrict later to your frontend URL
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -18,4 +18,4 @@ app.include_router(translate.router)
 
 @app.get("/")
 def root():
-    return {"message": "Vachaka Backend Running ✅"}
+    return {"message": "Vachaka backend running"}

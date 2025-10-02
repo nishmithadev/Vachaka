@@ -14,11 +14,6 @@ opencv-python==4.9.0.80
 numpy==1.26.4
 tensorflow==2.14.0   # Stable with Python 3.10
 
-# IBM Watson + Granite LLM integration
-ibm-watson==7.0.0
-ibm-cloud-sdk-core==3.18.3   # ✅ pinned, works with Python 3.10
-ibm-watson-machine-learning==1.0.357
-ibm-generative-ai==0.3.8
 
 # Text-to-Speech & Speech-to-Text
 gTTS==2.5.4
