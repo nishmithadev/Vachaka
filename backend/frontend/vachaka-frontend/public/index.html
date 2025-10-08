@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/logo192.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#4CAF50" />
+    <meta
+      name="description"
+      content="Vachaka - Sign to Speech Translator. Translate sign language into text and speech seamlessly."
+    />
+
+    <!-- SEO Meta Tags -->
+    <meta
+      name="keywords"
+      content="Vachaka, Sign Language, Speech Translator, Accessibility, React App"
+    />
+    <meta name="author" content="Vachaka Team" />
+
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+
+    <!-- Manifest for PWA -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <!-- Title -->
+    <title>Vachaka - Sign to Speech Translator</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom Styles -->
+    <style>
+      body {
+        margin: 0;
+        font-family: "Roboto", sans-serif;
+        background-color: #f7f9fc;
+      }
+      #root {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <!-- ✅ React will mount here -->
+    <div id="root"></div>
+
+    <!-- ✅ SIMD patch script -->
+    <script>
+      const originalFetch = window.fetch;
+      window.fetch = async (...args) => {
+        if (typeof args[0] === "string" && args[0].includes("simd")) {
+          console.warn("⚠️ Blocking SIMD fetch:", args[0]);
+          return originalFetch(
+            "https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands_solution_wasm_bin.js"
+          );
+        }
+        return originalFetch(...args);
+      };
+    </script>
+  </body>
+</html>

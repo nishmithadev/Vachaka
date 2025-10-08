@@ -1,3 +1,4 @@
+// src/pages/Dashboard.js
 import React, { useState } from "react";
 import HandTracker from "../component/HandTracker";
 import { Bar } from "react-chartjs-2";
@@ -12,22 +13,21 @@ import {
 } from "chart.js";
 import "./Dashboard.css";
 
-// Register Chart.js modules
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const Dashboard = () => {
-  const [detectedSign, setDetectedSign] = useState(null);
+  const [detectedSign, setDetectedSign] = useState("Waiting...");
   const [history, setHistory] = useState([]);
 
-  // This function will be called when CameraInput detects a sign
+  // ✅ This gets called whenever HandTracker detects a new sign
   const handleDetection = (sign) => {
-    if (sign) {
+    if (sign && sign !== "Waiting...") {
       setDetectedSign(sign);
-      setHistory((prev) => [...prev, sign].slice(-10)); // keep last 10
+      setHistory((prev) => [...prev, sign].slice(-10)); // Keep last 10 detections
     }
   };
 
-  // Count frequency for chart
+  // ✅ Count frequency for the bar chart
   const frequencies = history.reduce((acc, sign) => {
     acc[sign] = (acc[sign] || 0) + 1;
     return acc;
@@ -54,22 +54,21 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <h1>Vachaka Dashboard</h1>
+      <h1>🖐️ Vachaka Dashboard</h1>
 
       <div className="dashboard-grid">
-        {/* Left side: Camera feed + detected sign */}
+        {/* Left side: live camera */}
         <div className="video-section">
-          <HandTracker onResults={handleDetection} />
+          <HandTracker onDetect={handleDetection} /> {/* ✅ Correct prop name */}
           <div className="detected-box">
-            Detected Sign:{" "}
-            <strong>{detectedSign ? detectedSign : "Waiting..."}</strong>
+            Detected Sign: <strong>{detectedSign}</strong>
           </div>
         </div>
 
-        {/* Right side: Chart + history */}
+        {/* Right side: chart and history */}
         <div className="stats-section">
           <Bar data={chartData} options={chartOptions} />
-          <h3>History</h3>
+          <h3>Recent History</h3>
           <ul className="history-list">
             {history.map((s, i) => (
               <li key={i}>{s}</li>

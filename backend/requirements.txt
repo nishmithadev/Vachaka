@@ -1,6 +1,6 @@
 # Core backend framework
-fastapi==0.103.2
-uvicorn==0.27.1
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
 starlette==0.27.0
 
 # Data validation
@@ -8,12 +8,23 @@ pydantic==1.10.13
 typing-extensions==4.10.0
 annotated-types==0.7.0
 
-# Sign language detection + AI models
+# Sign language detection (MediaPipe + OpenCV + TensorFlow)
+numpy<2.0
+opencv-python==4.10.0.84
 mediapipe==0.10.14
-opencv-python==4.9.0.80
-numpy==1.26.4
-tensorflow==2.14.0   # Stable with Python 3.10
+tensorflow==2.15.0
+protobuf<5.0.0
 
+
+# Visualization (optional for debugging landmarks)
+matplotlib==3.7.2
+pillow==10.2.0
+
+# IBM Watson + Granite LLM integration
+ibm-watson==7.0.0
+ibm-cloud-sdk-core==3.18.5
+ibm-watson-machine-learning==1.0.357
+ibm-generative-ai==0.3.8
 
 # Text-to-Speech & Speech-to-Text
 gTTS==2.5.4
@@ -29,6 +40,3 @@ anyio==4.3.0
 h11==0.14.0
 click==8.1.8
 colorama==0.4.6
-
-# Optional but useful
-typing-inspection==0.4.1

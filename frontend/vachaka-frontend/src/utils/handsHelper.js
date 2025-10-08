@@ -1,30 +1,26 @@
 // src/utils/handsHelper.js
-import { Hands } from "@mediapipe/hands";
+import {
+  FilesetResolver,
+  HandLandmarker,
+} from "@mediapipe/tasks-vision";
 
-export function createHandsInstance(onResultsCallback) {
-  const hands = new Hands({
-    locateFile: (file) => {
-      if (file.includes("simd")) {
-        console.warn("⚠️ SIMD wasm requested → using stable wasm.");
-        return `${window.location.origin}/assets/hands_solution_wasm_bin.wasm`;
-      }
-      if (file.endsWith(".data")) {
-        return `${window.location.origin}/assets/hands_solution_packed_assets.bin`;
-      }
-      return `${window.location.origin}/assets/${file}`;
-    },
-  });
+let handLandmarker;
 
-  hands.setOptions({
-    maxNumHands: 2,
-    modelComplexity: 1,
-    minDetectionConfidence: 0.7,
-    minTrackingConfidence: 0.7,
-  });
+export async function initHands() {
+  if (!handLandmarker) {
+    const vision = await FilesetResolver.forVisionTasks(
+      // Mediapipe will fetch wasm for you automatically
+      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/wasm"
+    );
 
-  if (typeof onResultsCallback === "function") {
-    hands.onResults(onResultsCallback);
+    handLandmarker = await HandLandmarker.createFromOptions(vision, {
+      baseOptions: {
+        modelAssetPath:
+          "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
+      },
+      runningMode: "VIDEO",
+      numHands: 2,
+    });
   }
-
-  return hands;
+  return handLandmarker;
 }
