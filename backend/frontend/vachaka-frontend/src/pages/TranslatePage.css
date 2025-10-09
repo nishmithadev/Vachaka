@@ -1,0 +1,31 @@
+.translate-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  background: #f9fafb;
+  height: 100vh;
+}
+
+.translate-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #1f2937;
+}
+
+.video-feed {
+  width: 640px;
+  height: 480px;
+  border-radius: 12px;
+  background: black;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.output-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 12px;
+}

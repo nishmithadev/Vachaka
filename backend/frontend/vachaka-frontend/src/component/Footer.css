@@ -1,0 +1,39 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 30px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.2);
+  color: #333;
+  font-size: 14px;
+  animation: fadeInUp 1s ease-in-out;
+}
+
+.social-links {
+  display: flex;
+  gap: 12px;
+}
+
+.social-links a {
+  text-decoration: none;
+  font-size: 18px;
+  transition: transform 0.3s;
+}
+
+.social-links a:hover {
+  transform: scale(1.3);
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  0% {
+    transform: translateY(50%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
