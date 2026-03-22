@@ -1,0 +1,178 @@
+.sign-guide {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #666;
+  margin-top: -10px;
+  margin-bottom: 30px;
+}
+
+.guide-container {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+/* Sign Selector */
+.sign-selector h3 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.sign-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.sign-btn {
+  padding: 12px;
+  border: 2px solid #ddd;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.sign-btn:hover {
+  background: #f0f0f0;
+  border-color: #667eea;
+  transform: translateY(-2px);
+}
+
+.sign-btn.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: #667eea;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Sign Details */
+.sign-details {
+  background: #f9f9f9;
+  padding: 30px;
+  border-radius: 12px;
+  border: 2px solid #e0e0e0;
+}
+
+.sign-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 3px solid #667eea;
+}
+
+.sign-letter {
+  font-size: 72px;
+  font-weight: bold;
+  color: #667eea;
+  margin: 0;
+}
+
+.hand-count {
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.hand-count.one-hand {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.hand-count.two-hands {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.sign-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.info-box {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+}
+
+.info-box h4 {
+  margin: 0 0 12px 0;
+  color: #667eea;
+  font-size: 16px;
+}
+
+.info-box p {
+  margin: 0;
+  color: #333;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.info-box.checklist ul {
+  margin: 0;
+  padding-left: 20px;
+  list-style: none;
+}
+
+.info-box.checklist li {
+  padding: 8px 0;
+  color: #333;
+  font-size: 15px;
+}
+
+.info-box.checklist li strong {
+  color: #667eea;
+}
+
+.practice-tip {
+  margin-top: 20px;
+  padding: 15px;
+  background: #fff8e1;
+  border-left: 4px solid #ffc107;
+  border-radius: 4px;
+  color: #333;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.help-note {
+  margin-top: 30px;
+  padding: 20px;
+  background: #e8f5e9;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.help-note p {
+  margin: 0;
+  color: #2e7d32;
+  font-size: 15px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .guide-container {
+    grid-template-columns: 1fr;
+  }
+
+  .sign-grid {
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  .sign-letter {
+    font-size: 48px;
+  }
+}
