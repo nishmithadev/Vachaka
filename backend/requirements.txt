@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+mediapipe
+tensorflow
+opencv-python-headless
+gtts
+python-multipart
+numpy
+scikit-learn
+pytest
