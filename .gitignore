@@ -4,14 +4,14 @@ venv/
 __pycache__/
 *.pyc
 
-# Node.js
+# Node
 node_modules/
 
 # Environment variables
 .env
 
-# VS Code
-.vscode/
+# ML dataset
+backend/ml/dataset/
 
-# macOS
-.DS_Store
+# (Optional) Ignore trained models if you'll share them separately
+# backend/ml/saved_models/
