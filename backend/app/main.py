@@ -15,7 +15,10 @@ app.add_middleware(
 )
 
 os.makedirs("audio_output", exist_ok=True)
+os.makedirs("app/static/asl", exist_ok=True)
+
 app.mount("/audio", StaticFiles(directory="audio_output"), name="audio")
+app.mount("/asl", StaticFiles(directory="app/static/asl"), name="asl")
 
 app.include_router(sign_to_speech.router, prefix="/api/sign-to-speech", tags=["Sign to Speech"])
 app.include_router(speech_to_sign.router, prefix="/api/speech-to-sign", tags=["Speech to Sign"])
