@@ -1,19 +1,16 @@
-# Python
-backend/venv/
-venv/
 __pycache__/
 *.pyc
-
-# Node
-node_modules/
-
-# Environment variables
+venv/
 .env
-
-# ML dataset
 backend/ml/dataset/
-
-# (Optional) Ignore trained models if you'll share them separately
-# backend/ml/saved_models/backend/ml/dataset/
 backend/ml/dataset.zip
+backend/ml/saved_models/
+*.h5
+*.pkl
 backend/app/static/asl/
+backend/audio_output/
+audio_output/
+node_modules/
+frontend/build/
+.DS_Store
+Thumbs.db
