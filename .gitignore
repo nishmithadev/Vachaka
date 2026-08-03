@@ -14,4 +14,6 @@ node_modules/
 backend/ml/dataset/
 
 # (Optional) Ignore trained models if you'll share them separately
-# backend/ml/saved_models/
+# backend/ml/saved_models/backend/ml/dataset/
+backend/ml/dataset.zip
+backend/app/static/asl/
